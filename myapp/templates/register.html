@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registeration</title>
+	<meta charset="utf-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<header class="primary col-md-3 col-sm-12 col-12 col-lg-3" style="top: 0px;">
+<div class="firstbar">
+	<div class="container row text-right">	
+		<ul class="nav-icons">
+			<li><a href="register/"><i class="ion-person-add"></i><div>Register</div></a></li>
+			<li><a href="/login/"><i class="ion-person"></i><div>Login</div></a></li>
+		</ul>
+	</div>
+</div>
+</header>
+
+
+<section class="login first grey">
+	<div class="container">
+		<div class="box-wrapper">				
+			<div class="box box-border">
+				<div class="box-body">
+					<h4>Register</h4>
+					<form id="register" method="POST">
+						{%csrf_token %}
+						<div class="form-group">
+							<label>First Name</label>
+							<input name="first" class="form-control" type="text" required>
+						</div>
+						<div class="form-group">
+							<label>Last Name</label>
+							<input name="last" class="form-control" type="text" required>
+						</div>
+						<div class="form-group">
+							<label>Email</label>
+							<input name="email" class="form-control" type="email" required>
+						</div>
+						<div class="form-group">
+							<label>Username</label>
+							<input name="username" class="form-control" type="text" required>
+						</div>
+						<div class="form-group">
+							<label class="fw">Password</label>
+							<div style="position:relative"><input name="password" class="form-control" id="password" type="password" required>
+							<div style="position: relative;">
+							<input type="checkbox" onclick="myFunction()"> Show Password
+							</div>
+							<div id="sign" style="font-size: 12px;"></div>
+							</div><br>
+						<div class="form-group text-right">
+							<button type="submit" class="btn btn-primary btn-block">Register</button>
+						</div>
+						<div class="text-center">
+							<span class="text-muted">Already have an account?</span> <a href="login.html">Login</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+	function myFunction() {
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+        x.type = "text";
+    } else {
+        x.type = "password";
+    }
+}
+</script>
+
+<script>
+$("#register").submit(function(e) {
+    var url = "/register/"; // the script where you handle the form input.
+    if($("#password").val().length < 8)
+    	{
+    		alert("password length must be greater than 8 character.");
+    		return;
+    	}
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#register").serialize(), // serializes the form's elements.
+           dataType : "json",
+           success: function(data,status)
+           {
+           	window.location.href = data.Message;
+           },
+           error: function(data,status,xhr)
+           {
+           		alert(data.responseJSON.Message);
+           }
+         });
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+});
+</script>
+</body>
+</html>

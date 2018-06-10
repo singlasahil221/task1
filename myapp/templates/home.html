@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+	<meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'cs/style.css' %}">
+</head>
+<body>
+<!-- Home Page Starts -->
+<div class="container">
+    <div class="row my-2">
+        <div class="col-lg-8 col-12 col-sm-12 col-md-6 order-lg-2">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" data-target="#messages" data-toggle="tab" class="nav-link">Messages</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" data-target="#notification" data-toggle="tab" class="nav-link">Notifications</a>
+                </li>
+            </ul>
+            <div class="tab-content py-4">
+                <div class="tab-pane active" id="profile">
+                    <h5 class="mb-3">{{user.firstname}} {{user.lastname}}</h5>
+                    {% if request.user.is_authenticated %}
+                    <a href="/logout/"><button class="btn btn-default">Logout</button></a>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                            <h6>About</h6>
+                            <p>
+                                Web Designer, UI/UX Engineer
+                            </p>
+                            <h6>Hobbies</h6>
+                            <p>
+                                Indie music, skiing and hiking. I love the great outdoors.
+                            </p>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                        <!-- create new post -->
+                        {% if request.user == user %}
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap" style="height: 40px;width: 100px;">New post</button>
+
+						<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="exampleModalLabel">New Post</h5>
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						      </div>
+						      <div class="modal-body">
+						        <form action="/post/" method="post" enctype="multipart/form-data" id="posted">{% csrf_token %}
+						          <div class="form-group">
+						            <label for="Description" class="col-form-label"> Description </label>
+						            <textarea class="form-control" name="description"></textarea>
+						          </div>          
+						          <div class="form-group" style="border-width: 0px;">
+						            <label for="image" style="border-width: 0px;" class="col-form-label" >Upload image:</label>
+						            <input type="file" class="form-control" name="image" id="recipient-name" style="border-width: 0px;">
+						          </div>
+						        
+						      </div>
+						      <div class="modal-footer" >
+						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						        <button type="submit" class="btn btn-primary">Post to timeline</button>
+						        </form>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+						{% endif %}
+						<!-- new post modal box ends -->
+                        </div>
+                	</div>
+{%if post%}
+		    <div class="row well" id = "post">
+		        <!-- Blog Entries Column -->
+		        {% for i in post %}
+		        <div class="col-md-10" align="center">          <!-- Blog Post -->
+		          	<div class="card mb-4">
+		          		{% if i.image%}
+		            <img class="card-img-top" src="/media/{{ i.image }}" alt="Card image cap" style="max-width: 700px;max-height: 500px;" align="center">
+	            		{% endif %}
+		            <div class="card-body">
+		              <h2 class="card-title">Title</h2>
+		              <p class="card-text">
+		                  {{i.description}}
+		              </p>
+		            </div>
+		            <hr style="border: .5px solid;">
+		            <div class="card-footer" align="left;">
+
+		            <form method="post" id="form{{forloop.counter}}" >{% csrf_token %}
+		            	<input type="hidden" name="post_id" value="{{i.id}}">
+		            	<input type="hidden" name="user" value="{{request.user.username}}">
+		              <button type="submit" id="{{forloop.counter}}" class="like btn btn-default" ><div id="likes_countform{{forloop.counter}}">{{i.Likes}}</div>Like</button>
+		              <button type="submit" id="{{forloop.counter}}" class="dislike btn btn-default" ><div id="dislikes_countform{{forloop.counter}}">{{i.Dislikes}}</div>Dislike</button>
+		            </form>
+		            </div>
+		          	</div>
+		          	<hr  style="border: .5px solid;width: 100%">
+		        </div>
+		        
+		        {% endfor %}
+          		</div>
+          		{%else%}
+          		<h2>No posts to show</h2>
+          		{%endif%}
+            </div>
+                <div class="tab-pane" id="messages">
+                    <div class="alert alert-info alert-dismissable">
+                        <a class="panel-close close" data-dismiss="alert">×</a> This is an <strong>.alert</strong>. Use this to show important messages to the user.
+                    </div>
+                    <table class="table table-hover table-striped">
+                        <tbody>                                    
+                            <tr>
+                                <td>
+                                   <span class="float-right font-weight-bold">3 hrs ago</span> Here is your a link to the latest summary report from the..
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   <span class="float-right font-weight-bold">Yesterday</span> There has been a request on your account since that was..
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   <span class="float-right font-weight-bold">9/10</span> Porttitor vitae ultrices quis, dapibus id dolor. Morbi venenatis lacinia rhoncus. 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   <span class="float-right font-weight-bold">9/4</span> Vestibulum tincidunt ullamcorper eros eget luctus. 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   <span class="float-right font-weight-bold">9/4</span> Maxamillion ais the fix for tibulum tincidunt ullamcorper eros. 
+                                </td>
+                            </tr>
+                        </tbody> 
+                    </table>
+                </div>
+                <div class="tab-pane" id="notification">
+                    <div class="col-md-12">
+                        <h5 class="mt-2"><span class="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
+                        <table class="table table-sm table-hover table-striped">
+                            <tbody>                                    
+                                <tr>
+                                    <td>
+                                        <strong>Abby</strong> joined ACME Project Team in <strong>`Collaboration`</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Gary</strong> deleted My Board1 in <strong>`Discussions`</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Kensington</strong> deleted MyBoard3 in <strong>`Discussions`</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>John</strong> deleted My Board1 in <strong>`Discussions`</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Skell</strong> deleted his post Look at Why this is.. in <strong>`Discussions`</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Home page ends -->
+
+
+<script>
+$(".like").click(function(e) {
+
+    var url = "/like/";
+
+    var id = $(this).attr("id");
+    id = "form"+id;
+    data = $("#"+ id).serialize();
+    console.log("id is",data);
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#"+ id).serialize() , // serializes the form's elements.
+           success: function(data,status)
+           {
+
+           	$("#likes_count"+id).html(data.count);
+
+            	console.log($("#likes_count"+id));
+            	
+           },
+           error: function(data,status,xhr)
+           {
+              console.log('error',data);
+           }
+         });
+       e.preventDefault();
+       return false;
+    // avoid to execute the actual submit of the form.
+});
+$(".dislike").click(function(e) {
+
+    var url = "/dislike/";
+
+    var id = $(this).attr("id");
+    id = "form"+id;
+    data = $("#"+ id).serialize();
+    console.log("id is",data);
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#"+ id).serialize() , // serializes the form's elements.
+           success: function(data,status)
+           {
+
+           	$("#dislikes_count"+id).html(data.count);
+
+            	console.log($("#dislikes_count"+id));
+            	
+           },
+           error: function(data,status,xhr)
+           {
+              console.log('error',data);
+           }
+         });
+       e.preventDefault();
+       return false;
+    // avoid to execute the actual submit of the form.
+});
+</script>
+</body>
+</html>
