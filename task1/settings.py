@@ -157,7 +157,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 PROJECT_DIR = os.path.dirname(__file__)
 
-MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
+MEDIA_ROOT = "https://github.com/singlasahil221/task1/tree/master/task1/media/"
 
 MEDIA_URL = '/media/'
 
