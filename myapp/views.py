@@ -19,7 +19,7 @@ def home(request,**kwargs):
 			return HttpResponse("No user exist with this username.")
 	else:
 		user = request.user
-	top_posts = Post.objects.filter(user = user)
+	top_posts = Post.objects.filter(user = user).order_by('-id')
 	top_posts = top_posts[:30]
 	string = "welcome "+request.user.username
 	return render(request,"home.html",{"user":user,"post":top_posts,"Message":string})
