@@ -26,6 +26,8 @@ def Like(request):
 		id = request.POST["post_id"]
 		username = request.POST["user"]
 		post = Post.objects.get(id = id)
+		if Post.like_set.get(user = user).exists():
+			return JsonResponse(status=500,data={"Message":"Already Liked"})
 		user = User.objects.get(username = username)
 		liker = like()
 		if(post.Likes == 0):
