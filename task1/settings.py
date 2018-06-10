@@ -159,7 +159,7 @@ PROJECT_DIR = os.path.dirname(__file__)
 
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 
-MEDIA_URL = '/media/'
+MEDIA_URL = 'https://task12.herokuapp.com/media/'
 
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
