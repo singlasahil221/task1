@@ -33,6 +33,7 @@ urlpatterns = [
     path('post/',views.post),
     path('like/',views.Like),
     path('dislike/',views.Dislike),
+    path('',views.re),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

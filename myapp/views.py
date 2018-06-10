@@ -6,6 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout
 from .serializers import PostSerializer
 # Create your views here.
+
+def re(request):
+	return redirect("/home/")
+
 @login_required(login_url='/login/')
 def home(request,**kwargs):
 	if kwargs:
@@ -47,6 +51,8 @@ def Dislike(request):
 		username = request.POST["user"]
 		post = Post.objects.get(id = id);
 		user = User.objects.get(username = username)
+		if Post.dislike_set.get(user = user).exists():
+			return JsonResponse(status=500,data={"Message":"Already Liked"})
 		disliker = dislike()
 		if(post.Dislikes == 0):
 			post.Dislikes = 1
@@ -74,7 +80,7 @@ def post(request):
 
 def login1(request):
 	user = User()
-	next_url = request.GET.get("next",'/ghr/')
+	next_url = request.GET.get("next",'/home/')
 	if request.user.is_authenticated:
 		return HttpResponseRedirect(next_url)
 	if request.method == "POST":
@@ -92,7 +98,7 @@ def login1(request):
 
 
 def register(request):
-	next_Url = request.GET.get("next",'/ghr/')
+	next_Url = request.GET.get("next",'/home/')
 	if request.user.is_authenticated:
 		return HttpResponseRedirect(next_Url)
 	if request.method == 'POST':
