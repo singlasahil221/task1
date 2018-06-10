@@ -16,10 +16,11 @@ class Post(models.Model):
 	Dislikes = models.IntegerField(default=0)
 	created_at = models.DateTimeField(default = datetime.now)
 	user = models.ForeignKey(User,on_delete = models.CASCADE)
+	class meta:
+		ordering = ['id']
 	def __str__(self):
 		return 'Posted by' + self.user.username
-	class meta:
-		order_by = ['id']
+	
 
 class Comment(models.Model):
 	comment_description = models.CharField(max_length=100000, blank = False)
