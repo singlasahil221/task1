@@ -209,10 +209,10 @@ $(".like").click(function(e) {
            data: $("#"+ id).serialize() , // serializes the form's elements.
            success: function(data,status)
            {
+           	$("#likes_count"+id).html(data.count_likes);
+           	$("#dislikes_count"+id).html(data.count_dislikes);
 
-           	$("#likes_count"+id).html(data.count);
-
-            	console.log($("#likes_count"+id));
+            	console.log(data.count_likes,data.count_dislikes);
             	
            },
            error: function(data,status,xhr)
@@ -238,10 +238,10 @@ $(".dislike").click(function(e) {
            data: $("#"+ id).serialize() , // serializes the form's elements.
            success: function(data,status)
            {
-
-           	$("#dislikes_count"+id).html(data.count);
-
-            	console.log($("#dislikes_count"+id));
+           	$("#likes_count"+id).html(data.count_likes);
+           	$("#dislikes_count"+id).html(data.count_dislikes);
+           	console.log(data.count_likes,data.count_dislikes);
+            	//console.log($("#dislikes_count"+id));
             	
            },
            error: function(data,status,xhr)

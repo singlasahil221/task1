@@ -9,7 +9,7 @@ class Profile(models.Model):
 		return self.userName
 
 class Post(models.Model):
-	URL = models.CharField(max_length=1000,blank = False)
+	URL = models.CharField(max_length=1000,blank = True)
 	image = models.FileField(blank=True)
 	description = models.CharField(max_length=100000, default="",blank=True)
 	Likes = models.IntegerField(default=0)

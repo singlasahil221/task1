@@ -34,6 +34,9 @@ def Like(request):
 		if post.like_set.filter(user = user):
 			print("like")
 			return JsonResponse(status=400,data={"Message":"Already Liked"})
+		if post.dislike_set.filter(user = user):
+			post.dislike_set.filter(user = user).delete()
+			post.Dislikes -= 1
 		liker = like()
 		if(post.Likes == 0):
 			post.Likes = 1
@@ -43,7 +46,7 @@ def Like(request):
 		liker.liked_to = post
 		post.save()
 		liker.save()
-		return JsonResponse({"count":post.Likes})
+		return JsonResponse({"count_likes":post.Likes, "count_dislikes":post.Dislikes})
 
 @login_required(login_url='/login/')
 def Dislike(request):
@@ -55,6 +58,9 @@ def Dislike(request):
 		user = User.objects.get(username = username)
 		if post.dislike_set.filter(user = user):
 			return JsonResponse(status=403,data={"Message":"Already Liked"})
+		if post.like_set.filter(user = user):
+			post.like_set.filter(user = user).delete()
+			post.Likes -= 1
 		disliker = dislike()
 		if(post.Dislikes == 0):
 			post.Dislikes = 1
@@ -64,7 +70,7 @@ def Dislike(request):
 		disliker.disliked_to = post
 		post.save()
 		disliker.save()
-		return JsonResponse({"count":post.Dislikes})
+		return JsonResponse({"count_likes":post.Likes, "count_dislikes":post.Dislikes})
 
 
 
