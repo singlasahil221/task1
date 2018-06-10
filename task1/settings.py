@@ -25,7 +25,7 @@ SECRET_KEY = 'd#+v)p$s64@--31h9a@+*kd7^q+6_1#e+avx2yxpa8hcp3u%0x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://task12.herokuapp.com']
 
 
 # Application definition
@@ -159,7 +159,7 @@ PROJECT_DIR = os.path.dirname(__file__)
 
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 
-MEDIA_URL = 'https://task12.herokuapp.com/media/'
+MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
