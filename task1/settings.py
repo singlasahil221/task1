@@ -25,7 +25,7 @@ SECRET_KEY = 'd#+v)p$s64@--31h9a@+*kd7^q+6_1#e+avx2yxpa8hcp3u%0x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://task12.herokuapp.com']
+ALLOWED_HOSTS = ['task12.herokuapp.com']
 
 
 # Application definition
