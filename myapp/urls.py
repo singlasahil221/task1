@@ -32,7 +32,7 @@ urlpatterns = [
     path('logout/',views.logout_),
     path('post/',views.post),
     re_path(r'like/$',views.Like),
-    path('dislike/',views.Dislike),
+    re_path(r'dislik/$',views.Dislike),
     path('',views.re),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

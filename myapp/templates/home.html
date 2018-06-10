@@ -10,7 +10,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="{% static 'cs/style.css' %}">
+  
 </head>
 <body>
 <!-- Home Page Starts -->
@@ -194,6 +194,7 @@
 
 
 <script>
+
 $(".like").click(function(e) {
 
     var url = "/like/";
@@ -201,7 +202,7 @@ $(".like").click(function(e) {
     var id = $(this).attr("id");
     id = "form"+id;
     data = $("#"+ id).serialize();
-    console.log("id is",data);
+    console.log("like");
     $.ajax({
            type: "POST",
            url: url,
@@ -216,7 +217,7 @@ $(".like").click(function(e) {
            },
            error: function(data,status,xhr)
            {
-              console.log('error',data);
+              //console.log('error',data);
            }
          });
        e.preventDefault();
@@ -225,12 +226,12 @@ $(".like").click(function(e) {
 });
 $(".dislike").click(function(e) {
 
-    var url = "/dislike/";
+    var url = "/dislik/";
 
     var id = $(this).attr("id");
     id = "form"+id;
     data = $("#"+ id).serialize();
-    console.log("id is",data);
+    console.log("dislike");
     $.ajax({
            type: "POST",
            url: url,
@@ -245,7 +246,7 @@ $(".dislike").click(function(e) {
            },
            error: function(data,status,xhr)
            {
-              console.log('error',data);
+              //console.log('error',data);
            }
          });
        e.preventDefault();

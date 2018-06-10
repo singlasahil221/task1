@@ -29,10 +29,11 @@ def Like(request):
 	if(request.method == "POST"):
 		id = request.POST["post_id"]
 		username = request.POST["user"]
-		post = Post.objects.get(id = id)
-		if Post.like_set.get(user = user).exists():
-			return JsonResponse(status=500,data={"Message":"Already Liked"})
 		user = User.objects.get(username = username)
+		post = Post.objects.get(id = id)
+		if post.like_set.filter(user = user):
+			print("like")
+			return JsonResponse(status=400,data={"Message":"Already Liked"})
 		liker = like()
 		if(post.Likes == 0):
 			post.Likes = 1
@@ -47,12 +48,13 @@ def Like(request):
 @login_required(login_url='/login/')
 def Dislike(request):
 	if(request.method == "POST"):
+		print("dislike fount")
 		id = request.POST["post_id"]
 		username = request.POST["user"]
 		post = Post.objects.get(id = id);
 		user = User.objects.get(username = username)
-		if Post.dislike_set.get(user = user).exists():
-			return JsonResponse(status=500,data={"Message":"Already Liked"})
+		if post.dislike_set.filter(user = user):
+			return JsonResponse(status=403,data={"Message":"Already Liked"})
 		disliker = dislike()
 		if(post.Dislikes == 0):
 			post.Dislikes = 1
