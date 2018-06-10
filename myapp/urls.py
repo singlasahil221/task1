@@ -27,11 +27,11 @@ urlpatterns = [
     path('oauth/',include('social_django.urls', namespace = 'social')),
     path('login/', views.login1),
     path('register/',views.register),
-    re_path(r'^home/$',views.home),
+    re_path(r'^home/',views.home),
     re_path(r'^home/(?P<username>\w+)/$',views.home),
     path('logout/',views.logout_),
     path('post/',views.post),
-    path('like/',views.Like),
+    re_path(r'like/$',views.Like),
     path('dislike/',views.Dislike),
     path('',views.re),
 
