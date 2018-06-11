@@ -135,7 +135,7 @@
             </ul>
             <div class="tab-content py-4">
                 <div class="tab-pane active" id="profile">
-                    <h5 class="mb-3">{{user.firstname}} {{user.lastname}}</h5>
+                    <h2 class="mb-3">{{user.first_name}} {{user.last_name}}</h2>
                     {% if request.user.is_authenticated %}
                     <a href="/logout/"><button class="btn btn-default">Logout</button></a>
                     {% endif %}
@@ -200,10 +200,10 @@
                     </div>
                     <div class="pull-left meta">
                         <div class="title h5">
-                            <a href="#"><b>{{i.user.firstname}} {{i.user.lastname}}</b></a>
+                            <a href="#"><b>{{i.user.first_name}} {{i.user.last_name}}</b></a>
                             made a post.
                         </div>
-                        <h6 class="text-muted time">1 minute ago</h6>
+                        <h6 class="text-muted time">At {{i.created_at}}</h6>
                     </div>
                 </div> 
                 {% if i.image%}
