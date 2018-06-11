@@ -1,4 +1,4 @@
-{% load static %}
+{% load extra_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -196,11 +196,11 @@
             <div class="panel panel-white post panel-shadow">
                 <div class="post-heading">
                     <div class="pull-left image">
-                        <img src="{% if i.user.profile.image %}/media/{{ i.image }}{% else %} https://ssl.gstatic.com/accounts/ui/avatar_2x.png{% endif %} " class="img-circle avatar img-responsive" style="max-width: 50px;max-height: 50px;" alt="user profile image">
+                        <a href="/home/{{i.user.username}}/"><img src="{% if i.user.profile.image %}/media/{{ i.image }}{% else %} https://ssl.gstatic.com/accounts/ui/avatar_2x.png{% endif %} " class="img-circle avatar img-responsive" style="max-width: 50px;max-height: 50px;" alt="user profile image">
                     </div>
                     <div class="pull-left meta">
                         <div class="title h5">
-                            <a href="#"><b>{{i.user.first_name}} {{i.user.last_name}}</b></a>
+                            <b>{{i.user.first_name}} {{i.user.last_name}}</b></a>
                             made a post.
                         </div>
                         <h6 class="text-muted time">At {{i.created_at}}</h6>
@@ -208,7 +208,7 @@
                 </div> 
                 {% if i.image%}
                 <center>
-		            <img class="card-img-top img-responsive" src="/media/{{ i.image }}" alt="Card image cap" style="max-width:90%;max-height: 500px;" align="center">
+		            <img class="card-img-top img-responsive" src="/media/{{ i.image }}" alt="No Image Found!" style="max-width:90%;max-height: 500px;" align="center">
 		            </center>
 	            		{% endif %}
                 <div class="post-description"> 
@@ -223,7 +223,9 @@
 		            
 		            <span id="dislikes_countform{{forloop.counter}}">{{i.Dislikes}}</span> <i class="fa fa-thumbs-down icon"></i>
 		            <button type="submit" id="{{forloop.counter}}" class="dislike {%if i in dislike_list %}btn-primary{%endif%} btn btn-default" > Dislike</button>
+		            <a href="/comment/{{i.id}}/" target="blank" style="float: right;;"><button type="button" align="right" class="btn btn-secondary"><span><b>{{comments_list|key:i}}</span> Comment</b></button></a>
 		        </div>
+
 		            </form>
                         
                     </div>

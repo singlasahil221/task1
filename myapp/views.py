@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from .serializers import PostSerializer
 # Create your views here.
 
+
+
 def re(request):
 	return redirect("/home/")
 
@@ -22,17 +24,19 @@ def home(request,username=''):
 	else:
 		user = request.user
 
-	like_list,dislike_list={},{}
+	like_list,dislike_list,comments_list={},{},{}
 	posts = Post.objects.filter(user = user)
 	for i in posts:
 		if(i.like_set.filter(user = request.user)):
 			like_list[i] = True
 		if(i.dislike_set.filter(user = request.user)):
 			dislike_list[i] = True
+		if i.comment_set.all().exists():
+			comments_list[i] = len(list(i.comment_set.all()))
 	top_posts = posts[:10]
 	top_posts = Post.objects.filter(user = user).order_by('-id')
 	string = "Welcome "+request.user.username
-	return render(request,"home.html",{"user":user,"post":top_posts,"Message":string,"like_list":like_list,"dislike_list":dislike_list})
+	return render(request,"home.html",{"user":user,"post":top_posts,"Message":string,"like_list":like_list,"dislike_list":dislike_list,"comments_list":comments_list})
 
 @login_required(login_url='/login/')
 def Like(request):
@@ -120,7 +124,7 @@ def login1(request):
 
 
 
-def register(request):
+def registers(request):
 	next_Url = request.GET.get("next",'/home/')
 	if request.user.is_authenticated:
 		return HttpResponseRedirect(next_Url)
@@ -146,3 +150,17 @@ def register(request):
 def logout_(request):
 	logout(request)
 	return HttpResponseRedirect('/home/')
+
+def comment(request,post_id):
+	post = Post.objects.get(id = post_id)
+	if request.method == "POST" and request.user.is_authenticated:
+		comment = Comment()
+		comment.comment_description = request.POST["description"]
+		comment.user = request.user
+		comment.posted_on = post
+		comment.save()
+		return JsonResponse(data = {"comment":comment.comment_description,"first_name":comment.user.first_name,"last_name":comment.user.last_name})
+	comment = post.comment_set.all()
+	return render(request,"comment.html",{"user":post.user,"post":post,"comments":comment})
+
+

@@ -4,6 +4,7 @@ from datetime import datetime
 # Create your models here.
 
 class Profile(models.Model):
+	#dp = models.ImageField(default="https://ssl.gstatic.com/accounts/ui/avatar_2x.png")
 	user = models.OneToOneField(User,on_delete=models.CASCADE)
 	def __str__(self):
 		return self.userName
@@ -17,7 +18,7 @@ class Post(models.Model):
 	created_at = models.DateTimeField(default = datetime.now)
 	user = models.ForeignKey(User,on_delete = models.CASCADE)
 	def __str__(self):
-		return 'Posted by' + self.user.username
+		return str(self.id)
 	class meta:
 		ordering = ['-id']
 

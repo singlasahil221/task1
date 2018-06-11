@@ -1,0 +1,217 @@
+{%load extra_tags%}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>comments</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" >
+  <style type="text/css">   
+.panel-shadow {
+    box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
+}
+.panel-white {
+  border: 1px solid #dddddd;
+}
+.panel-white  .panel-heading {
+  color: #333;
+  background-color: #fff;
+  border-color: #ddd;
+}
+.panel-white  .panel-footer {
+  background-color: #fff;
+  border-color: #ddd;
+}
+
+.post .post-heading {
+  height: 95px;
+  padding: 20px 15px;
+}
+.post .post-heading .avatar {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin-right: 15px;
+}
+.post .post-heading .meta .title {
+  margin-bottom: 0;
+}
+.post .post-heading .meta .title a {
+  color: black;
+}
+.post .post-heading .meta .title a:hover {
+  color: #aaaaaa;
+}
+.post .post-heading .meta .time {
+  margin-top: 8px;
+  color: #999;
+}
+.post .post-image .image {
+  width: 100%;
+  height: auto;
+}
+.post .post-description {
+  padding: 15px;
+}
+.post .post-description p {
+  font-size: 14px;
+}
+  <style type="text/css">
+  	/* CSS Test begin */
+.comment-box {
+    margin-top: 30px !important;
+}
+/* CSS Test end */
+
+.comment-box img {
+    width: 50px;
+    height: 50px;
+}
+.comment-box .media-left {
+    padding-right: 10px;
+    width: 65px;
+}
+.comment-box .media-body p {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+.comment-box .media-body .media p {
+    margin-bottom: 0;
+}
+.comment-box .media-heading {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 7px 10px;
+    position: relative;
+    margin-bottom: -1px;
+}
+.comment-box .media-heading:before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-width: 1px 0 0 1px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    position: absolute;
+    top: 10px;
+    left: -6px;
+}
+.pb-cmnt-textarea {
+        resize: none;
+        padding: 20px;
+        height: 130px;
+        width: 100%;
+        border: 1px solid #F2F2F2;
+    }
+  </style>
+</head>
+<body>
+<div class="row">
+    <div class="container">
+    <div class="col-sm-8 col-lg-12">
+            <div class="panel panel-white post panel-shadow row">
+                <div class="post-heading">
+                    <a href="/home/{{user.username}}/">
+                    <div class="pull-left image">
+                        <img src="{% if i.user.profile.image %}/media/{{ i.image }}{% else %} https://ssl.gstatic.com/accounts/ui/avatar_2x.png{% endif %} " class="img-circle avatar img-responsive" style="max-width: 50px;max-height: 50px;" alt="user profile image">
+                    </div>
+                    <div class="pull-left meta">
+                        <div class="title h5">
+                            <b>{{user.first_name}} {{user.last_name}}</b></a>
+                            made a post.
+                        </div>
+                        <h6 class="text-muted time">At {{post.created_at}}</h6>
+                    </div>
+                </div> 
+                {% if post.image%}
+                <center>
+                <img class="card-img-top img-responsive" src="/media/{{ post.image }}" alt="No Image Found!" style="max-width:90%;max-height: 500px;" align="center">
+                </center>
+                {% endif %}
+                <div class="post-description stats"> 
+                    <p>{{post.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+<div class='container comment'>
+    {% for comment in comments%}
+		 <div class="media comment-box">
+            <div class="media-left">
+                    <img class="user-photo" src="{% if user.profile.image %}{{user.profile.image}}{% else %}https://ssl.gstatic.com/accounts/ui/avatar_2x.png{% endif %}">
+            </div>
+            <div class="media-body">
+                <a href="/home/{{comment.user.username}}/"><h4 class="media-heading">{{comment.user.first_name}} {{comment.user.last_name}}</h4></a>
+                <p>{{comment.comment_description}}</p>
+              
+            </div>
+        </div>
+        {% endfor %}
+</div>
+<div class="container dummy" style="display: none;">
+         <div class="media comment-box">
+            <div class="media-left">
+                    <img class="user-photo" src="{% if request.user.profile.image %}{{request.user.profile.image}}{% else %}https://ssl.gstatic.com/accounts/ui/avatar_2x.png{% endif %}">
+            </div>
+            <div class="media-body">
+                <a href="/home/{{request.user.username}}"><h4 class="media-heading"></h4></a>
+                <p class="description"></p>
+              
+            </div>
+        </div>
+</div>
+
+<div class="container pb-cmnt-container">
+    <div class="row">
+        <div class="col-md-8 col-sm-offset-1">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <form id="form" method="post">
+                        {%csrf_token%}
+                    <textarea placeholder="Write your comment here!" name="description" class="pb-cmnt-textarea"></textarea>
+                    <button type="submit" class="btn btn-primary pull-right" type="button">Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  $("#form").submit(function(e) {
+
+    var url = "/comment/"+ {{post.id}} + "/"; // the script where you handle the form input.
+
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#form").serialize(), // serializes the form's elements.
+           success: function(data,status)
+           {
+            console.log(data.comment); 
+            var x = $(".dummy").clone();
+            //console.log(x.attr("style"));
+            x.find(".media-heading").html(data.first_name + " " + data.last_name);
+            x.find(".description").html(data.comment);
+            
+            $(".comment").append("<div>"+x.html()+"</div>");
+            $("#form").trigger('reset');
+           },
+           error: function(data,status,xhr)
+           {
+              console.log(data);
+           }
+         });
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+});
+</script>
+</body>
+</html>
+          		

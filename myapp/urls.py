@@ -26,13 +26,14 @@ admin.autodiscover()
 urlpatterns = [
     path('oauth/',include('social_django.urls', namespace = 'social')),
     path('login/', views.login1),
-    path('register/',views.register),
+    path('register/',views.registers),
     re_path(r'^home/$',views.home),
     re_path(r'^home/(?P<username>\w+|)/$',views.home),
     path('logout/',views.logout_),
     path('post/',views.post),
     re_path(r'like/$',views.Like),
     re_path(r'dislik/$',views.Dislike),
+    re_path(r'^comment/(?P<post_id>\w+)/$',views.comment),
     path('',views.re),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
