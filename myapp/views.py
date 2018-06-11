@@ -19,10 +19,17 @@ def home(request,**kwargs):
 			return HttpResponse("No user exist with this username.")
 	else:
 		user = request.user
-	top_posts = Post.objects.filter(user = user)
-	top_posts = top_posts[:30]
+
+	like_list,dislike_list={},{}
+	posts = Post.objects.filter(user = user)
+	for i in posts:
+		if(i.like_set.filter(user = request.user)):
+			like_list[i] = True
+		if(i.dislike_set.filter(user = request.user)):
+			dislike_list[i] = True
+	top_posts = posts[:10]
 	string = "welcome "+request.user.username
-	return render(request,"home.html",{"user":user,"post":top_posts,"Message":string})
+	return render(request,"home.html",{"user":user,"post":top_posts,"Message":string,"like_list":like_list,"dislike_list":dislike_list})
 
 @login_required(login_url='/login/')
 def Like(request):
@@ -32,8 +39,10 @@ def Like(request):
 		user = User.objects.get(username = username)
 		post = Post.objects.get(id = id)
 		if post.like_set.filter(user = user):
-			print("like")
-			return JsonResponse(status=400,data={"Message":"Already Liked"})
+			post.like_set.filter(user = user).delete()
+			post.Likes -= 1
+			post.save()
+			return JsonResponse(data={"count_likes":post.Likes, "count_dislikes":post.Dislikes})
 		if post.dislike_set.filter(user = user):
 			post.dislike_set.filter(user = user).delete()
 			post.Dislikes -= 1
@@ -57,7 +66,10 @@ def Dislike(request):
 		post = Post.objects.get(id = id);
 		user = User.objects.get(username = username)
 		if post.dislike_set.filter(user = user):
-			return JsonResponse(status=403,data={"Message":"Already Liked"})
+			post.dislike_set.filter(user = user).delete()
+			post.Dislikes -= 1
+			post.save()
+			return JsonResponse(data={"count_likes":post.Likes, "count_dislikes":post.Dislikes})
 		if post.like_set.filter(user = user):
 			post.like_set.filter(user = user).delete()
 			post.Likes -= 1

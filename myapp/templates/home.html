@@ -9,8 +9,113 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" >
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
+  <style type="text/css">	
+.panel-shadow {
+    box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
+}
+.panel-white {
+  border: 1px solid #dddddd;
+}
+.panel-white  .panel-heading {
+  color: #333;
+  background-color: #fff;
+  border-color: #ddd;
+}
+.panel-white  .panel-footer {
+  background-color: #fff;
+  border-color: #ddd;
+}
+
+.post .post-heading {
+  height: 95px;
+  padding: 20px 15px;
+}
+.post .post-heading .avatar {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin-right: 15px;
+}
+.post .post-heading .meta .title {
+  margin-bottom: 0;
+}
+.post .post-heading .meta .title a {
+  color: black;
+}
+.post .post-heading .meta .title a:hover {
+  color: #aaaaaa;
+}
+.post .post-heading .meta .time {
+  margin-top: 8px;
+  color: #999;
+}
+.post .post-image .image {
+  width: 100%;
+  height: auto;
+}
+.post .post-description {
+  padding: 15px;
+}
+.post .post-description p {
+  font-size: 14px;
+}
+.post .post-description .stats {
+  margin-top: 20px;
+}
+.post .post-description .stats .stat-item {
+  display: inline-block;
+  margin-right: 15px;
+}
+.post .post-description .stats .stat-item .icon {
+  margin-right: 8px;
+}
+.post .post-footer {
+  border-top: 1px solid #ddd;
+  padding: 15px;
+}
+.post .post-footer .input-group-addon a {
+  color: #454545;
+}
+.post .post-footer .comments-list {
+  padding: 0;
+  margin-top: 20px;
+  list-style-type: none;
+}
+.post .post-footer .comments-list .comment {
+  display: block;
+  width: 100%;
+  margin: 20px 0;
+}
+.post .post-footer .comments-list .comment .avatar {
+  width: 35px;
+  height: 35px;
+}
+.post .post-footer .comments-list .comment .comment-heading {
+  display: block;
+  width: 100%;
+}
+.post .post-footer .comments-list .comment .comment-heading .user {
+  font-size: 14px;
+  font-weight: bold;
+  display: inline;
+  margin-top: 0;
+  margin-right: 10px;
+}
+.post .post-footer .comments-list .comment .comment-heading .time {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 0;
+  display: inline;
+}
+.post .post-footer .comments-list .comment .comment-body {
+  margin-left: 50px;
+}
+.post .post-footer .comments-list .comment > .comments-list {
+  margin-left: 50px;
+}
+  </style>
 </head>
 <body>
 <!-- Home Page Starts -->
@@ -45,6 +150,7 @@
                                 Indie music, skiing and hiking. I love the great outdoors.
                             </p>
                         </div>
+
                         <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                         <!-- create new post -->
                         {% if request.user == user %}
@@ -82,41 +188,56 @@
 						{% endif %}
 						<!-- new post modal box ends -->
                         </div>
-                	</div>
-{%if post%}
-		    <div class="row well" id = "post">
-		        <!-- Blog Entries Column -->
-		        {% for i in post %}
-		        <div class="col-md-10" align="center">          <!-- Blog Post -->
-		          	<div class="card mb-4">
-		          		{% if i.image%}
-		            <img class="card-img-top img-responsive" src="/media/{{ i.image }}" alt="Card image cap" style="max-width:100%;max-height: 500px;" align="center">
+                        <div class="container">
+	{%if post%}
+    <div class="row">
+    	{% for i in post %}
+        <div class="col-sm-8">
+            <div class="panel panel-white post panel-shadow">
+                <div class="post-heading">
+                    <div class="pull-left image">
+                        <img src="{% if i.user.profile.image %}/media/{{ i.image }}{% else %} https://ssl.gstatic.com/accounts/ui/avatar_2x.png{% endif %} " class="img-circle avatar img-responsive" style="max-width: 50px;max-height: 50px;" alt="user profile image">
+                    </div>
+                    <div class="pull-left meta">
+                        <div class="title h5">
+                            <a href="#"><b>{{i.user.firstname}} {{i.user.lastname}}</b></a>
+                            made a post.
+                        </div>
+                        <h6 class="text-muted time">1 minute ago</h6>
+                    </div>
+                </div> 
+                {% if i.image%}
+                <center>
+		            <img class="card-img-top img-responsive" src="/media/{{ i.image }}" alt="Card image cap" style="max-width:90%;max-height: 500px;" align="center">
+		            </center>
 	            		{% endif %}
-		            <div class="card-body">
-		              <h2 class="card-title"></h2>
-		              <p class="card-text">
-		                  {{i.description}}
-		              </p>
-		            </div>
-		            <hr style="border: .5px solid;">
-		            <div class="card-footer" align="left;">
-
-		            <form method="post" id="form{{forloop.counter}}" >{% csrf_token %}
+                <div class="post-description"> 
+                    <p>{{i.description}}</p>
+                    <div class="stats">
+                    	<form method="post" id="form{{forloop.counter}}" >{% csrf_token %}
 		            	<input type="hidden" name="post_id" value="{{i.id}}">
 		            	<input type="hidden" name="user" value="{{request.user.username}}">
-		              <button type="submit" id="{{forloop.counter}}" class="like btn btn-default" ><div id="likes_countform{{forloop.counter}}">{{i.Likes}}</div>Like</button>
-		              <button type="submit" id="{{forloop.counter}}" class="dislike btn btn-default" ><div id="dislikes_countform{{forloop.counter}}">{{i.Dislikes}}</div>Dislike</button>
-		            </form>
-		            </div>
-		          	</div>
-		          	<hr  style="border: .5px solid;width: 100%">
+		            	<div>
+		            <span id="likes_countform{{forloop.counter}}">{{i.Likes}}</span> <i class="fa fa-thumbs-up icon"></i>	
+		            <button type="submit" id="{{forloop.counter}}" class="like {%if i in like_list %}btn-primary{%endif%} btn-default btn" >Like</button> 
+		            
+		            <span id="dislikes_countform{{forloop.counter}}">{{i.Dislikes}}</span> <i class="fa fa-thumbs-down icon"></i>
+		            <button type="submit" id="{{forloop.counter}}" class="dislike {%if i in dislike_list %}btn-primary{%endif%} btn btn-default" > Dislike</button>
 		        </div>
-		        
-		        {% endfor %}
-          		</div>
-          		{%else%}
-          		<h2>No posts to show</h2>
-          		{%endif%}
+		            </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div> 
+    {%else%}
+    <h2>No posts to show</h2>
+    {%endif%}      
+</div>
+                	</div>
+
             </div>
                 <div class="tab-pane" id="messages">
                     <div class="alert alert-info alert-dismissable">
@@ -198,26 +319,50 @@
 $(".like").click(function(e) {
 
     var url = "/like/";
-
-    var id = $(this).attr("id");
-    id = "form"+id;
+    var id1 = $(this).attr("id");
+    id = "form"+id1;
     data = $("#"+ id).serialize();
-    console.log("like");
+    div_like = $("#likes_count"+id).text();
+    div_dislike = $("#dislikes_count"+id).text();
+    //console.log("like");
     $.ajax({
            type: "POST",
            url: url,
            data: $("#"+ id).serialize() , // serializes the form's elements.
            success: function(data,status)
            {
+           	if(data.count_likes>div_like)
+           	{
+           		console.log($("[id='"+id1+"']:eq(1)").attr("class"));
+           		$("#"+id1).removeClass("btn-default");
+           		$("#"+id1).addClass("btn-primary");
+           	}
+           	else
+           	{
+           		$("#"+id1).addClass("btn-default");
+           		$("#"+id1).removeClass("btn-primary");
+           	}
+           	if(data.count_dislikes>div_dislike)
+           	{
+           		console.log($("[id='"+id1+"']:eq(1)").attr("class"));
+           		$("[id='"+id1+"']:eq(1)").removeClass("btn-default");
+           		$("[id='"+id1+"']:eq(1)").addClass("btn-primary");
+           	}
+           	else
+           	{
+           		$("[id='"+id1+"']:eq(1)").addClass("btn-default");
+           		$("[id='"+id1+"']:eq(1)").removeClass("btn-primary");
+           	}
+
            	$("#likes_count"+id).html(data.count_likes);
            	$("#dislikes_count"+id).html(data.count_dislikes);
 
-            	console.log(data.count_likes,data.count_dislikes);
+            	console.log(data.count_likes,div_like,data.count_dislikes);
             	
            },
            error: function(data,status,xhr)
            {
-              //console.log('error',data);
+              console.log('error',data.responseJSON.Message);
            }
          });
        e.preventDefault();
@@ -228,16 +373,40 @@ $(".dislike").click(function(e) {
 
     var url = "/dislik/";
 
-    var id = $(this).attr("id");
-    id = "form"+id;
+    var id1 = $(this).attr("id");
+    id = "form"+id1;
     data = $("#"+ id).serialize();
-    console.log("dislike");
+    //console.log("dislike");
+    div_like = $("#likes_count"+id).text();
+    div_dislike = $("#dislikes_count"+id).text();
     $.ajax({
            type: "POST",
            url: url,
            data: $("#"+ id).serialize() , // serializes the form's elements.
            success: function(data,status)
            {
+           	if(data.count_likes>div_like)
+           	{
+           		console.log($("[id='"+id1+"']:eq(1)").attr("class"));
+           		$("#"+id1).removeClass("btn-default");
+           		$("#"+id1).addClass("btn-primary");
+           	}
+           	else
+           	{
+           		$("#"+id1).addClass("btn-default");
+           		$("#"+id1).removeClass("btn-primary");
+           	}
+           	if(data.count_dislikes>div_dislike)
+           	{
+           		console.log($("[id='"+id1+"']:eq(1)").attr("class"));
+           		$("[id='"+id1+"']:eq(1)").removeClass("btn-default");
+           		$("[id='"+id1+"']:eq(1)").addClass("btn-primary");
+           	}
+           	else
+           	{
+           		$("[id='"+id1+"']:eq(1)").addClass("btn-default");
+           		$("[id='"+id1+"']:eq(1)").removeClass("btn-primary");
+           	}
            	$("#likes_count"+id).html(data.count_likes);
            	$("#dislikes_count"+id).html(data.count_dislikes);
            	console.log(data.count_likes,data.count_dislikes);

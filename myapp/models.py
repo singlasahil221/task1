@@ -19,7 +19,7 @@ class Post(models.Model):
 	def __str__(self):
 		return 'Posted by' + self.user.username
 	class meta:
-		order_by = ['id']
+		ordering = ['-id']
 
 class Comment(models.Model):
 	comment_description = models.CharField(max_length=100000, blank = False)
