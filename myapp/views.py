@@ -11,10 +11,12 @@ def re(request):
 	return redirect("/home/")
 
 @login_required(login_url='/login/')
-def home(request,**kwargs):
-	if kwargs:
-		if User.objects.filter(username = kwargs['username']).exists():
-			user = User.objects.get(username = kwargs['username'])
+def home(request,username=''):
+	print(username)
+
+	if username:
+		if User.objects.filter(username = username).exists():
+			user = User.objects.get(username = username)
 		else:
 			return HttpResponse("No user exist with this username.")
 	else:
