@@ -28,7 +28,8 @@ def home(request,**kwargs):
 		if(i.dislike_set.filter(user = request.user)):
 			dislike_list[i] = True
 	top_posts = posts[:10]
-	string = "welcome "+request.user.username
+	top_posts = Post.objects.filter(user = user).order_by('-id')
+	string = "Welcome "+request.user.username
 	return render(request,"home.html",{"user":user,"post":top_posts,"Message":string,"like_list":like_list,"dislike_list":dislike_list})
 
 @login_required(login_url='/login/')
